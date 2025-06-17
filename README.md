@@ -5,7 +5,7 @@ This repository contains a Python script that turns a small subset of Markdown i
 ## Algorithm Overview
 
 - Skip YAML front matter delimited by `---`.
-- Paragraphs become `<p>` tags.
+- Each non-blank line becomes its own `<p>` tag.
 - ATX headers (`#` ... `######`) map to `<h1>`&ndash;`<h6>`.
 - Images written as `![[name.ext]]` are loaded from `../graphics/`.
 - Fenced code blocks are wrapped with a Copy button.
@@ -17,6 +17,7 @@ This repository contains a Python script that turns a small subset of Markdown i
 2. line-by-line:
     - regexes check for a starting pattern blank line, starting of code block, header or image
     - No starting pattern
+    - Each remaining line is wrapped in `<p>`
 
 ## Usage
 

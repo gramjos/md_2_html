@@ -8,7 +8,7 @@ Usage:
 Features implemented:
 
 * Skip YAML front‑matter delimited by leading/ending lines with exactly `---`
-* Paragraphs → <p>
+* Each non‑blank line becomes its own `<p>` element
 * ATX headers (# … ######) → <h1> … <h6>
 * Images in Obsidian format  ![[name.ext]] → <img src="../graphics/name.ext">
 * Fenced code blocks (```lang) get:
@@ -18,7 +18,7 @@ Features implemented:
       </div>
 * Inline markup inside headers/paragraphs (but **not** in code blocks):
       `code`   *em*   _em_   **strong**   __underline__
-* Everything else becomes plain text in the surrounding <p> or left literal.
+* Everything else becomes plain text in the surrounding `<p>` or left literal.
 -------------------------------------------------------------------------"""
 
 import re
@@ -55,19 +55,12 @@ def inline_md(text: str) -> str:
         text = rx.sub(repl, text)
     return text
 
-def flush_paragraph(buf: List[str], out: List[str]) -> None:
-    """Write and clear the current paragraph buffer."""
-    if buf:
-        paragraph = inline_md(" ".join(buf))
-        out.append(f"<p>{paragraph}</p>")
-        buf.clear()
 
 # ────────────────────────────  main converter  ───────────────────────── #
 
 def markdown_to_html(md_text: str, title: str = "Document") -> str:
     lines = md_text.splitlines()
     out: List[str] = []
-    pbuf: List[str] = []
     i = 0
 
     # 1) strip front‑matter
@@ -81,16 +74,14 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
     while i < len(lines):
         line = lines[i]
 
-        # blank → paragraph boundary
+        # blank line → skip
         if RE_BLANK.match(line):
-            flush_paragraph(pbuf, out)
             i += 1
             continue
 
         # fenced code block
         m = RE_FENCE.match(line)
         if m:
-            flush_paragraph(pbuf, out)
             lang = m.group(1)
             code_lines = []
             i += 1
@@ -110,7 +101,6 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
         # header
         m = RE_HEADER.match(line)
         if m:
-            flush_paragraph(pbuf, out)
             level = len(m.group(1))
             hdr = inline_md(m.group(2).strip())
             out.append(f"<h{level}>{hdr}</h{level}>")
@@ -120,17 +110,15 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
         # image
         m = RE_IMAGE.match(line)
         if m:
-            flush_paragraph(pbuf, out)
             name = html.escape(m.group(1).strip())
             out.append(f'<img src="../graphics/{name}" alt="{name}">')
             i += 1
             continue
 
         # default → paragraph text
-        pbuf.append(line.rstrip("\n"))
+        paragraph = inline_md(line.rstrip("\n"))
+        out.append(f"<p>{paragraph}</p>")
         i += 1
-
-    flush_paragraph(pbuf, out)
 
     # 3) wrap with boilerplate
     head = f"""<!DOCTYPE html>
