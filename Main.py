@@ -17,6 +17,7 @@ RE_HEADER  = re.compile(r"^(#{1,6})\s*(.*)$")
 RE_FENCE   = re.compile(r"^```(\w*)\s*$")
 RE_LATEX_BLOCK = re.compile(r"^\$\$\s*$")
 RE_BLANK   = re.compile(r"^\s*$")
+RE_CALLOUT = re.compile(r'^>\s*\[!(\w+)\]\s*(.*)$')
 
 # inline (apply in **this** order)
 INLINE_RULES: List[Tuple[re.Pattern, str]] = [
@@ -35,6 +36,30 @@ def inline_md(text: str) -> str:
     for rx, repl in INLINE_RULES:
         text = rx.sub(repl, text)
     return text
+
+
+CALLOUT_ICONS = {
+    "NOTE": "&#8505;",      # ℹ
+    "INFO": "&#8505;",
+    "TIP": "&#128161;",      # 💡
+    "IMPORTANT": "&#10071;", # ❗
+    "WARNING": "&#9888;",    # ⚠
+    "CAUTION": "&#9888;",
+    "DANGER": "&#128293;",   # 🔥
+}
+
+
+def build_callout(kind: str, title: str, body_lines: List[str]) -> str:
+    """Return HTML for a callout block."""
+    icon = CALLOUT_ICONS.get(kind.upper(), "&#8505;")
+    title_html = inline_md(title) if title else ""
+    body_html = "".join(f"<p>{inline_md(ln)}</p>" for ln in body_lines)
+    return (
+        f'<div class="callout callout-{kind.lower()}">'  # container
+        f'<div class="callout-title">{icon} {title_html}</div>'
+        f'<div class="callout-body">{body_html}</div>'
+        f'</div>'
+    )
 
 
 # ────────────────────────────  main converter  ───────────────────────── #
@@ -58,6 +83,18 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
         # blank line → skip
         if RE_BLANK.match(line):
             i += 1
+            continue
+
+        # callout block starting with "> [!TYPE] Title"
+        if m := RE_CALLOUT.match(line):
+            kind = m.group(1)
+            title_text = m.group(2).strip()
+            body_lines = []
+            i += 1
+            while i < len(lines) and lines[i].startswith('>'):
+                body_lines.append(lines[i][1:].lstrip())
+                i += 1
+            out.append(build_callout(kind, title_text, body_lines))
             continue
 
         # fenced code block
