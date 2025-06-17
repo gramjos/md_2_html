@@ -18,8 +18,9 @@ h1,h2,h3,h4,h5,h6{{margin:1.1em 0 0.6em}}
 .code-block pre{{margin:0;overflow-x:auto}}
 .code-block button.copy{{position:absolute;top:0.3rem;right:0.3rem;border:none;background:#eaeaea;padding:0.2rem 0.5rem;cursor:pointer}}
 .code-block button.copy:active{{background:#d5d5d5}}
-.callout{{border-left:4px solid #888;background:#f9f9f9;padding:0.5rem 1rem;margin:1em 0}}
-.callout-title{{font-weight:bold;margin-bottom:0.25rem}}
+.callout{{border-left:4px solid #888;background:#f9f9f9;padding:0.5rem 1rem;margin:1em 0;position:relative}}
+.callout-title{{font-weight:bold;margin-bottom:0.25rem;display:flex;align-items:center}}
+.callout-title button.toggle{{margin-left:auto;border:none;background:transparent;cursor:pointer;font-size:1em}}
 .callout-body p{{margin:0.25rem 0}}
 </style>
 <script>
@@ -29,6 +30,16 @@ function copySibling(btn){{
         btn.textContent = 'Copied!';
         setTimeout(function(){{btn.textContent = orig;}}, 1000);
     }});
+}}
+function toggleCallout(btn){{
+    const body = btn.closest('.callout').querySelector('.callout-body');
+    if (body.style.display === 'none') {{
+        body.style.display = '';
+        btn.textContent = '-';
+    }} else {{
+        body.style.display = 'none';
+        btn.textContent = '+';
+    }}
 }}
 </script>
 </head>
