@@ -11,6 +11,13 @@ class TestMd2Html(unittest.TestCase):
         self.assertIn('<button class="copy"', html)
         self.assertNotIn('title: sample', html)
 
+    def test_callout(self):
+        md = "> [!NOTE] Title\n> body line"
+        html = markdown_to_html(md, title="callout")
+        self.assertIn('callout-note', html)
+        self.assertIn('Title', html)
+        self.assertIn('body line', html)
+
     def test_multiline_latex(self):
         md = """$$\n\\begin{array}{rcl}\n2&5&7 \\\n2&5&7 \\\n\\end{array}\n$$"""
         html = markdown_to_html(md, title="latex")
