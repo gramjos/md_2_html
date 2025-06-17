@@ -15,6 +15,7 @@ USAGE = "Usage: python Main.py FILE.md [output.html]"
 RE_IMAGE   = re.compile(r"^\s*!\[\[([^|\]]+)(?:\|[^]]*)?]]\s*$")
 RE_HEADER  = re.compile(r"^(#{1,6})\s*(.*)$")
 RE_FENCE   = re.compile(r"^```(\w*)\s*$")
+RE_LATEX_BLOCK = re.compile(r"^\$\$\s*$")
 RE_BLANK   = re.compile(r"^\s*$")
 
 # inline (apply in **this** order)
@@ -72,6 +73,19 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
             out.append(
                 CODE_BLOCK_TEMPLATE.format(lang=lang, code=code)
             )
+            continue
+
+        # multiline LaTeX block delimited by $$
+        if RE_LATEX_BLOCK.match(line):
+            latex_lines = []
+            i += 1
+            while i < len(lines) and not RE_LATEX_BLOCK.match(lines[i]):
+                latex_lines.append(lines[i].rstrip("\n"))
+                i += 1
+            if i < len(lines):
+                i += 1  # skip closing $$
+            latex_content = "\n".join(latex_lines)
+            out.append(f"<p>$$\n{latex_content}\n$$</p>")
             continue
 
         # header
