@@ -66,7 +66,14 @@ def build_callout(kind: str, title: str, body_lines: List[str]) -> str:
 
 # ────────────────────────────  main converter  ───────────────────────── #
 
-def markdown_to_html(md_text: str, title: str = "Document") -> str:
+def markdown_to_html(
+    md_text: str,
+    md_home_pg: Path,
+    terminal_sites: List[str],
+    valid_dirs: List[str],
+    root_dir: Path,
+    title: str = "Document",
+) -> str:
     lines = md_text.splitlines()
     out: List[str] = []
     i = 0
@@ -148,6 +155,31 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
         out.append(f"<p>{paragraph}</p>")
         i += 1
 
+    # append home page content
+    if md_home_pg.exists():
+        out.append("<hr>")
+        for ln in md_home_pg.read_text(encoding="utf8").splitlines():
+            if ln.strip():
+                out.append(f"<p>{inline_md(ln)}</p>")
+
+    # links to other pages
+    def make_link(item: str) -> str:
+        href = html.escape(str((root_dir / item).as_posix()))
+        text = html.escape(item)
+        return f'<a href="{href}">{text}</a>'
+
+    if terminal_sites:
+        out.append("<ul>")
+        for site in terminal_sites:
+            out.append(f"<li>{make_link(site)}</li>")
+        out.append("</ul>")
+
+    if valid_dirs:
+        out.append("<ul>")
+        for d in valid_dirs:
+            out.append(f"<li>{make_link(d)}</li>")
+        out.append("</ul>")
+
     # 3) wrap with boilerplate
     head = get_head(title)
     tail = "\n</body>\n</html>"
@@ -169,7 +201,15 @@ def main() -> None:
     md_text = in_path.read_text(encoding="utf8")
     title   = in_path.stem.replace("_", " ").title()
 
-    html_out = markdown_to_html(md_text, title=title)
+    home_pg = Path('home_page.md')
+    html_out = markdown_to_html(
+        md_text,
+        home_pg,
+        ['Pipeline_example.html'],
+        ['docs'],
+        Path('.'),
+        title=title,
+    )
     x= out_path.write_text(html_out, encoding="utf8")
     print(f"{x=}")
     print(f"✓  wrote {out_path}")
