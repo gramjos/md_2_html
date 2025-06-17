@@ -144,9 +144,16 @@ h1,h2,h3,h4,h5,h6{{margin:1.1em 0 0.6em}}
 .code-block{{position:relative;background:#f5f5f5;border:1px solid #ddd;padding:0.75rem 0.5rem;margin:1em 0}}
 .code-block pre{{margin:0;overflow-x:auto}}
 .code-block button.copy{{position:absolute;top:0.3rem;right:0.3rem;border:none;background:#eaeaea;padding:0.2rem 0.5rem;cursor:pointer}}
+.code-block button.copy:active{{background:#d5d5d5}}
 </style>
 <script>
-function copySibling(btn){{navigator.clipboard.writeText(btn.nextElementSibling.innerText);}}
+function copySibling(btn){{
+    navigator.clipboard.writeText(btn.nextElementSibling.innerText).then(function(){{
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function(){{btn.textContent = orig;}}, 1000);
+    }});
+}}
 </script>
 </head>
 <body>
