@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
 md2html.py  –  Convert a restricted‑flavor Markdown file to standalone HTML
-────────────────────────────────────────────────────────────────────────────
-Spec‑sheet implemented:
+
+Usage:
+    python Main.py FILE.md [output.html]
+
+Features implemented:
 
 * Skip YAML front‑matter delimited by leading/ending lines with exactly `---`
 * Paragraphs → <p>
@@ -23,6 +26,8 @@ import sys
 import html
 from pathlib import Path
 from typing import List, Tuple
+
+USAGE = "Usage: python Main.py FILE.md [output.html]"
 
 # ────────────────────────────  regexes  ──────────────────────────────── #
 
@@ -153,7 +158,7 @@ function copySibling(btn){{navigator.clipboard.writeText(btn.nextElementSibling.
 
 def main() -> None:
     if len(sys.argv) < 2 or sys.argv[1] in {"-h", "--help"}:
-        print("Usage: md2html.py FILE.md [output.html]", file=sys.stderr)
+        print(USAGE, file=sys.stderr)
         sys.exit(1)
 
     in_path  = Path(sys.argv[1])
