@@ -80,8 +80,7 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
             continue
 
         # fenced code block
-        m = RE_FENCE.match(line)
-        if m:
+        if m := RE_FENCE.match(line):
             lang = m.group(1)
             code_lines = []
             i += 1
@@ -99,8 +98,7 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
             continue
 
         # header
-        m = RE_HEADER.match(line)
-        if m:
+        if m := RE_HEADER.match(line):
             level = len(m.group(1))
             hdr = inline_md(m.group(2).strip())
             out.append(f"<h{level}>{hdr}</h{level}>")
@@ -108,8 +106,7 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
             continue
 
         # image
-        m = RE_IMAGE.match(line)
-        if m:
+        if m := RE_IMAGE.match(line):
             name = html.escape(m.group(1).strip())
             out.append(f'<img src="../graphics/{name}" alt="{name}">')
             i += 1
@@ -170,5 +167,4 @@ def main() -> None:
     print(f"{x=}")
     print(f"✓  wrote {out_path}")
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": main()
