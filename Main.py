@@ -56,7 +56,9 @@ def build_callout(kind: str, title: str, body_lines: List[str]) -> str:
     body_html = "".join(f"<p>{inline_md(ln)}</p>" for ln in body_lines)
     return (
         f'<div class="callout callout-{kind.lower()}">'  # container
-        f'<div class="callout-title">{icon} {title_html}</div>'
+        f'<div class="callout-title">{icon} {title_html}'
+        f'<button class="toggle" onclick="toggleCallout(this)">-</button>'
+        f'</div>'
         f'<div class="callout-body">{body_html}</div>'
         f'</div>'
     )

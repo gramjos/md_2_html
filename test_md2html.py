@@ -17,6 +17,7 @@ class TestMd2Html(unittest.TestCase):
         self.assertIn('callout-note', html)
         self.assertIn('Title', html)
         self.assertIn('body line', html)
+        self.assertIn('class="toggle"', html)
 
     def test_multiline_latex(self):
         md = """$$\n\\begin{array}{rcl}\n2&5&7 \\\n2&5&7 \\\n\\end{array}\n$$"""
