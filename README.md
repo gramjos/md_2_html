@@ -32,3 +32,16 @@ If the output path is omitted, `FILE.html` is created next to the input.  See `P
 | Cell 1   | Cell 2   | Cell 3   |
 | Cell 4   | Cell 5   | Cell 6   |
 | Cell 7   | Cell 8   | Cell 9   |
+
+
+#### Supported Markdown
+- [ x ] headers
+- [ x ] code blocks with copy buttons
+- [ x ] bold, code-face
+- [ x ] images on own line
+- [  ] inline images
+- [ x ] inline latex
+```html
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+```

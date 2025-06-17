@@ -1,25 +1,4 @@
 #!/usr/bin/env python3
-"""
-md2html.py  –  Convert a restricted‑flavor Markdown file to standalone HTML
-
-Usage:
-    python Main.py FILE.md [output.html]
-
-Features implemented:
-
-* Skip YAML front‑matter delimited by leading/ending lines with exactly `---`
-* Each non‑blank line becomes its own `<p>` element
-* ATX headers (# … ######) → <h1> … <h6>
-* Images in Obsidian format  ![[name.ext]] → <img src="../graphics/name.ext">
-* Fenced code blocks (```lang) get:
-      <div class="code-block">
-          <button class="copy" onclick="copySibling(this)">Copy</button>
-          <pre><code class="language-lang">…</code></pre>
-      </div>
-* Inline markup inside headers/paragraphs (but **not** in code blocks):
-      `code`   *em*   _em_   **strong**   __underline__
-* Everything else becomes plain text in the surrounding `<p>` or left literal.
--------------------------------------------------------------------------"""
 
 import re
 import sys
