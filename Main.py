@@ -26,7 +26,8 @@ from typing import List, Tuple
 
 # ────────────────────────────  regexes  ──────────────────────────────── #
 
-RE_IMAGE   = re.compile(r"^\s*!$begin:math:display$\\[([^|$end:math:display$]+)(?:\|[^]]*)?]]\s*$")
+# image syntax: Obsidian style ![[name.ext]] or ![[name.ext|option]]
+RE_IMAGE   = re.compile(r"^\s*!\[\[([^|\]]+)(?:\|[^]]*)?]]\s*$")
 RE_HEADER  = re.compile(r"^(#{1,6})\s+(.*)$")
 RE_FENCE   = re.compile(r"^```(\w*)\s*$")
 RE_BLANK   = re.compile(r"^\s*$")
@@ -140,7 +141,7 @@ h1,h2,h3,h4,h5,h6{{margin:1.1em 0 0.6em}}
 .code-block button.copy{{position:absolute;top:0.3rem;right:0.3rem;border:none;background:#eaeaea;padding:0.2rem 0.5rem;cursor:pointer}}
 </style>
 <script>
-function copySibling(btn){navigator.clipboard.writeText(btn.nextElementSibling.innerText);}
+function copySibling(btn){{navigator.clipboard.writeText(btn.nextElementSibling.innerText);}}
 </script>
 </head>
 <body>
