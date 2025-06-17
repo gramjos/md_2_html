@@ -1,4 +1,9 @@
 # Markdown to HTML Converter
+| filename | description | No. lines |
+|----------|----------|----------|
+| `Main.py`   | line by line parsing   | 175   |
+| `templates.py`   | web templates   | 55   |
+| `test_md2html.py`   | tests   | 38   |
 
 This repository contains a Python script that turns a small subset of Markdown into a standalone HTML page. It is meant for quick static pages with minimal styling.
 
@@ -20,26 +25,19 @@ This repository contains a Python script that turns a small subset of Markdown i
     - Each remaining line is wrapped in `<p>`
 
 ## Usage
-
 ```
 python Main.py FILE.md [output.html]
 ```
 
 If the output path is omitted, `FILE.html` is created next to the input.  See `Pipeline_example.md` for an example and `test_md2html.py` for a basic test suite.
 
-| Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
-| Cell 1   | Cell 2   | Cell 3   |
-| Cell 4   | Cell 5   | Cell 6   |
-| Cell 7   | Cell 8   | Cell 9   |
-
-
 #### Supported Markdown
+- [  ] inline images
+- [  ] excalidraw images
 - [ x ] headers
 - [ x ] code blocks with copy buttons
 - [ x ] bold, code-face
 - [ x ] images on own line
-- [  ] inline images
 - [ x ] inline latex
 ```html
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>

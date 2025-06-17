@@ -1,7 +1,29 @@
 ---
 tags: [zsh, pipe, pipeline, linux, command_cut, command_column, command_grep, history_substitution_operator, standard_error, redirection,]
+web_code: "dir"
 ---
 ##### Demonstrative pipe example
+#####Demonstrative pipe example
+
+> [!CAUTION] Title
+> Contents
+> more
+
+> [!DANGER] Title
+> Contents
+> more
+
+Creating a matrix
+$$
+\begin{array}{rcl}
+	2&5&7 \\
+	2&5&7 \\
+\end{array}
+$$
+
+> [!NOTE] Title
+> Contents
+> more
 ![[pipeline_example.png]]
 Above is the partial output of the command `$ ls /bin /usr/bin`. These are the binary executables in the file system.
 Say, we wanted to remove the white text. 

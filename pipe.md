@@ -12,6 +12,13 @@ The `-v` or `--invert-match` means, everything that does not match the grep stri
 ```shell
  $ ls /bin /usr/bin |grep -v '/bin:$'
 ```
+> [!CAUTION] Title
+> Contents
+> more
+
+> [!DANGER] Title
+> Contents
+> more
 
 Creating a matrix
 $$
@@ -20,5 +27,9 @@ $$
 	2&5&7 \\
 \end{array}
 $$
+
+> [!NOTE] Title
+> Contents
+> more
 
 fi

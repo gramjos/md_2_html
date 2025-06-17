@@ -75,6 +75,7 @@ def markdown_to_html(md_text: str, title: str = "Document") -> str:
     if lines and lines[0].strip() == "---":
         i += 1
         while i < len(lines) and lines[i].strip() != "---":
+            # TODO: process front-matter 
             i += 1
         i += 1   # skip closing '---'
 
