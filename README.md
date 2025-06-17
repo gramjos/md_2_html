@@ -32,9 +32,9 @@ python Main.py FILE.md [output.html]
 If the output path is omitted, `FILE.html` is created next to the input.  See `Pipeline_example.md` for an example and `test_md2html.py` for a basic test suite.
 
 #### Supported Markdown
-- [  ] inline images
-- [  ] excalidraw images
-- [ x ] headers
+- [ ] inline images
+- [ ] excalidraw images
+- [x] headers
 - [ x ] code blocks with copy buttons
 - [ x ] bold, code-face
 - [ x ] images on own line
