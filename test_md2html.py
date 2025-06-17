@@ -11,6 +11,14 @@ class TestMd2Html(unittest.TestCase):
         self.assertIn('<button class="copy"', html)
         self.assertNotIn('title: sample', html)
 
+    def test_multiline_latex(self):
+        md = """$$\n\\begin{array}{rcl}\n2&5&7 \\\n2&5&7 \\\n\\end{array}\n$$"""
+        html = markdown_to_html(md, title="latex")
+        self.assertIn("<p>$$", html)
+        self.assertIn("\\begin{array}{rcl}", html)
+        self.assertIn("2&5&7", html)
+        self.assertIn("$$</p>", html)
+
     def test_pipeline_example(self):
         path = 'Pipeline_example.md'
         md_text = open(path, encoding='utf8').read()
