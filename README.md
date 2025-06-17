@@ -1,9 +1,9 @@
 # Markdown to HTML Converter
 | filename | description | No. lines |
 |----------|----------|----------|
-| `Main.py`   | line by line parsing   | 175   |
+| `Main.py`   | line by line parsing   | 190   |
 | `templates.py`   | web templates   | 55   |
-| `test_md2html.py`   | tests   | 38   |
+| `test_md2html.py`   | tests   | 41   |
 
 This repository contains a Python script that turns a small subset of Markdown into a standalone HTML page. It is meant for quick static pages with minimal styling.
 
@@ -30,6 +30,11 @@ python Main.py FILE.md [output.html]
 ```
 
 If the output path is omitted, `FILE.html` is created next to the input.  See `Pipeline_example.md` for an example and `test_md2html.py` for a basic test suite.
+
+### Additional Information Embedded
+`markdown_to_html` now accepts a path to a home page, a list of site links and a
+list of directory links. These are appended to the generated HTML so the home
+page text is displayed and the links are clickable.
 
 #### Supported Markdown
 - [ ] inline images
