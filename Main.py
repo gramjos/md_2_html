@@ -33,7 +33,7 @@ USAGE = "Usage: python Main.py FILE.md [output.html]"
 
 # image syntax: Obsidian style ![[name.ext]] or ![[name.ext|option]]
 RE_IMAGE   = re.compile(r"^\s*!\[\[([^|\]]+)(?:\|[^]]*)?]]\s*$")
-RE_HEADER  = re.compile(r"^(#{1,6})\s+(.*)$")
+RE_HEADER  = re.compile(r"^(#{1,6})\s*(.*)$")
 RE_FENCE   = re.compile(r"^```(\w*)\s*$")
 RE_BLANK   = re.compile(r"^\s*$")
 
@@ -164,18 +164,22 @@ function copySibling(btn){{
 # ────────────────────────────  CLI  ──────────────────────────── #
 
 def main() -> None:
-    if len(sys.argv) < 2 or sys.argv[1] in {"-h", "--help"}:
-        print(USAGE, file=sys.stderr)
-        sys.exit(1)
+    # if len(sys.argv) < 2 or sys.argv[1] in {"-h", "--help"}:
+    #     print(USAGE, file=sys.stderr)
+    #     sys.exit(1)
 
-    in_path  = Path(sys.argv[1])
-    out_path = Path(sys.argv[2]) if len(sys.argv) > 2 else in_path.with_suffix(".html")
+    # in_path  = Path(sys.argv[1])
+    # out_path = Path(sys.argv[2]) if len(sys.argv) > 2 else in_path.with_suffix(".html")
+
+    in_path  = Path('pipe.md')
+    out_path = in_path.with_suffix(".html")
 
     md_text = in_path.read_text(encoding="utf8")
     title   = in_path.stem.replace("_", " ").title()
 
     html_out = markdown_to_html(md_text, title=title)
-    out_path.write_text(html_out, encoding="utf8")
+    x= out_path.write_text(html_out, encoding="utf8")
+    print(f"{x=}")
     print(f"✓  wrote {out_path}")
 
 if __name__ == "__main__":
