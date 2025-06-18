@@ -176,63 +176,49 @@ def markdown_to_html(
             out.append(f"<li>{make_link(d)}</li>")
         out.append("</ul>")
 
-    # 3) wrap with boilerplate
-    head = get_head(title)
-    tail = "\n</body>\n</html>"
     from bs4 import BeautifulSoup
 
-    # The string variable to be embedded
     your_string = ""
-    for i in out:
-        your_string += i + "\n"
+    for i in out: your_string += i + "\n"
 
-    # Read in the HTML file
-    with open('/Users/gramjos/Computation/obsidianRoot_2_web/index.html', 'r') as f:
+    with open('/Users/gramjos/Computation/obsidianRoot_2_web/md_2_html/index.html', 'r') as f:
         contents = f.read()
 
-    # Create a BeautifulSoup object to parse the HTML
     soup = BeautifulSoup(contents, 'html.parser')
 
-    # Find the div tag with the specified id and insert the HTML content
     placement_div = soup.find('div', id='placement')
     if placement_div:
-        # Clear existing content and append the parsed HTML string.
-        # This ensures the HTML is rendered, not displayed as a literal string.
         placement_div.clear()
         placement_div.append(BeautifulSoup(your_string, 'html.parser'))
 
-    # Print the modified HTML
-    # print(soup.prettify())
-
-    # To save the modified HTML back to a file:
-    # with open('your_html_file_modified.html', 'w') as f:
-    #     f.write(str(soup))
-    # return head + "\n".join(out) + tail
     return str(soup)
 
 # ────────────────────────────  CLI  ──────────────────────────── #
 
 def main() -> None:
-    # if len(sys.argv) < 2 or sys.argv[1] in {"-h", "--help"}:
-    #     print(USAGE, file=sys.stderr)
-    #     sys.exit(1)
+    """
 
-    # in_path  = Path(sys.argv[1])
-    # out_path = Path(sys.argv[2]) if len(sys.argv) > 2 else in_path.with_suffix(".html")
+    embed:
+        - `md_text`
+        - links to singleton articles `terminal_sites`
+        - links to directories `valid_dirs`
+    all three into the template `index.html` and write to `out_path`.
 
-    in_path  = Path('pipe.md')
-    out_path = in_path.with_suffix(".html")
+    """
+
+    in_path  = Path('pipe.md') # given some md
+    out_path = in_path.with_suffix(".html") # output html
 
     md_text = in_path.read_text(encoding="utf8")
     title   = in_path.stem.replace("_", " ").title()
 
     home_pg = Path('home_page.md')
     html_out = markdown_to_html(
-        md_text,
-        home_pg,
-        ['Pipeline_example.html'],
-        ['docs'],
-        Path('.'),
+        md_text=md_text,
+        md_home_pg=home_pg,
+        terminal_sites=['Pipeline_example.md', 'Pipeline_example_2.md'], # site singletons 
+        valid_dirs=['docs'],
+        root_dir=Path('.'),
         title=title,
     )
     x= out_path.write_text(html_out, encoding="utf8")

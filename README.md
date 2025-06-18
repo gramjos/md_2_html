@@ -1,7 +1,7 @@
 # Markdown to HTML Converter
 | filename | description | No. lines |
 |----------|----------|----------|
-| `Main.py`   | line by line parsing   | 190   |
+| `x.py`   | line by line parsing   | 190   |
 | `templates.py`   | web templates   | 55   |
 | `test_md2html.py`   | tests   | 41   |
 
