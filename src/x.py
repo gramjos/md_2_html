@@ -2,12 +2,12 @@
 """Minimal Markdown to HTML conversion utility."""
 
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import html
 import re
-import templates as t
-from GenHTML import GenHomePage, GenSingleton
+from . import templates as t
+from .GenHTML import GenHomePage, GenSingleton
 # from templates import CODE_BLOCK_TEMPLATE
 
 USAGE = "Usage: python Main.py FILE.md "
@@ -184,91 +184,46 @@ def _embed_in_template(content_html: str, template_path: Path) -> str:
 # ────────────────────────────  main converter  ───────────────────────── #
 
 def markdown_to_html(
-    md_path: Path,
+    md_input: Union[str, Path],
+    home_page: Path,
     terminal_sites: List[str],
     valid_dirs: List[str],
     root_dir: Path,
     title: str = "Document",
 ) -> str:
-    """Return a full HTML page for ``md_text`` using ``index.html`` template.
-
-    Parameters
-    ----------
-    md_path:
-        Markdown to convert.
-    terminal_sites:
-        List of article page names to link to.
-    valid_dirs:
-        List of directory names to link to.
-    root_dir:
-        Directory where ``index.html`` resides and links are resolved.
-    title:
-        Unused but kept for API compatibility.
-    """
-
-    html_parts: List[str] = []
+    """Return a full HTML page for ``md_input`` using ``index.html`` template."""
 
     template_path = Path("src/index.html")
-    md_home_pg = root_dir/Path('README.md')
 
-    # tasks:
-    # - get all items in root
-    # - Are we making a README Homepage?
-    # # -- need valid dirs and terminal sites (singleton)
-    # # -- generate html 
+    if isinstance(md_input, Path):
+        lines = md_input.read_text(encoding="utf8").splitlines()
+    else:
+        lines = str(md_input).splitlines()
 
-    ignore_list = {'.DS_Store'}
+    html_parts: List[str] = []
+    html_parts.extend(_convert_lines(lines))
 
-    # all items in root
-    l=list(Path(root_dir).iterdir())
-    ns=[i.name for i in l]
-    # case, is the length of (non README) markdown files greater than 0?
-    has_other_markdown = any(
-    n.lower().endswith('.md') 
-    and 
-    n.lower() != 'readme.md' 
-    and
-    n not in ignore_list
-    for n in ns 
-    )
-    dirss = [d for d in l if d.is_dir() and d.name not in ignore_list and is_valid_dir(d)]
-    has_other_valid_dirs = any(dirss)
+    # placeholder content representing the home page body
+    html_parts.append("<p>This is the <em>home</em> page.</p>")
 
-    if "README.md" in ns:
-        home_lines = md_home_pg.read_text(encoding="utf8").splitlines()
-        html_parts.extend(_convert_lines(home_lines))
-        html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
-        # TODO: create the single sites at this level so when link are clicked they go to a real site with the template
-        # # use the template index.html and fill in with conterted md from `terminal_sites` 
-        if has_other_valid_dirs: GenHomePage(root_dir, valid_dirs)
-        if has_other_markdown: GenSingleton(root_dir, terminal_sites)
-
-        content_html = "\n".join(html_parts)
-        x = _embed_in_template(content_html, template_path)
-        return x
-
-
-    md_text = md_path.read_text(encoding="utf8")
-    html_parts.extend(_convert_lines(md_text.splitlines()))
-    html_parts.append("<hr>")
     html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
 
     content_html = "\n".join(html_parts)
-    x = _embed_in_template(content_html, template_path= template_path)
-    return x
+    return _embed_in_template(content_html, template_path)
 
 # ────────────────────────────  CLI  ──────────────────────────── #
 
 def main() -> None:
     """CLI entry point used for manual testing."""
 
-    md_input = Path('example_input/pipe.md')
+    md_input = Path('example_input/pipe.md').read_text(encoding='utf8')
     output_path = Path('example_output/pipe.html')
-    root_dir=Path('/Users/gramjos/Documents/try_hosting_Vault/')
+    root_dir = Path('.')
 
     html_out = markdown_to_html(
-        md_path=md_input,
-        terminal_sites=['Pipeline_example.md', 'Pipeline_example_2.md'], 
+        md_input,
+        Path('home_page.md'),
+        terminal_sites=['Pipeline_example.md', 'Pipeline_example_2.md'],
         valid_dirs=['docs'],
         root_dir=root_dir,
     )
