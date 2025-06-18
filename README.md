@@ -7,10 +7,13 @@
 
 This repository contains a Python script that turns a small subset of Markdown into a standalone HTML page. It is meant for quick static pages with minimal styling.
 
-This program takes a single markdown and creates two types of web pages:
+This program takes a Path as input and creates two types of web pages:
 1. 'README home page' holds content, links to singleton articles, and links to other 'README home page' (valid directories)
 2. 'Singleton Articles' no links just content
 Both, 1 & 2 use the template `index.html`
+
+#### File Structure Design
+Every directory has a README.md which acts as the menu (or Homepage) for that directory. Directories are considered valid when a README.md is present. When a README.md is being converted to html hyperlink are embedded.
 
 ## Program Sequential Overview
 0.  Homepage or Singleton?
