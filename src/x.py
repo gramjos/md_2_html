@@ -6,7 +6,7 @@ from typing import List, Tuple
 
 import html
 import re
-from templates import CODE_BLOCK_TEMPLATE
+from src.templates import CODE_BLOCK_TEMPLATE
 
 USAGE = "Usage: python Main.py FILE.md "
 
@@ -220,7 +220,7 @@ def markdown_to_html(
 def main() -> None:
     """CLI entry point used for manual testing."""
 
-    input_path = Path('pipe.md')
+    input_path = Path('example_input/pipe.md')
     output_path = input_path.with_suffix(".html")
 
     md_text = input_path.read_text(encoding="utf8")

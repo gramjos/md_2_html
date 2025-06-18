@@ -1,19 +1,26 @@
 # Markdown to HTML Converter
 | filename | description | No. lines |
 |----------|----------|----------|
-| `x.py`   | line by line parsing   | 190   |
+| `x.py`   | line by line parsing and then html creation  | 190   |
 | `templates.py`   | web templates   | 55   |
 | `test_md2html.py`   | tests   | 41   |
 
 This repository contains a Python script that turns a small subset of Markdown into a standalone HTML page. It is meant for quick static pages with minimal styling.
 
-This program creates two type of web pages:
+This program takes a single markdown and creates two types of web pages:
 1. 'README home page' holds content, links to singleton articles, and links to other 'README home page' (valid directories)
 2. 'Singleton Articles' no links just content
 Both, 1 & 2 use the template `index.html`
 
-## Algorithm Overview
+## Program Sequential Overview
+0.  Homepage or Singleton?
+1. expect metadata
+2. line-by-line:
+    - regexes check for a starting pattern blank line, starting of code block, header or image
+    - No starting pattern matched, the each remaining line is wrapped in `<p>`
+3. if Homepage, then embed additional hyperlinks (to other Homepages and Singletons)
 
+## HTML Tag Parsing Algorithm Overview
 - Skip YAML front matter delimited by `---`.
 - Each non-blank line becomes its own `<p>` tag.
 - ATX headers (`#` ... `######`) map to `<h1>`&ndash;`<h6>`.
@@ -22,12 +29,6 @@ Both, 1 & 2 use the template `index.html`
 - Inline markup for `*em*`, `_em_`, `**strong**`, `__underline__` and `` `code` `` is processed in headers and paragraphs.
 - All other text is left as plain text.
 
-## Sequential Overview
-1. expect metadata
-2. line-by-line:
-    - regexes check for a starting pattern blank line, starting of code block, header or image
-    - No starting pattern
-    - Each remaining line is wrapped in `<p>`
 
 ## Usage
 ```
@@ -48,6 +49,7 @@ page text is displayed and the links are clickable.
 - [ x ] bold, code-face
 - [ x ] images on own line
 - [ x ] inline latex
+latex is rendered in `p` tags when these scripts are present
 ```html
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
