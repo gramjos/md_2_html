@@ -1,6 +1,7 @@
 """HTML templates used by markdown_to_html"""
 import html
 
+__all__ = ["get_head", "CODE_BLOCK_TEMPLATE"]
 
 def get_head(title: str) -> str:
     """Return the HTML <head> section with the given title."""

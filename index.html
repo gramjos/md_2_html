@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>your‑handle :: portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+    --bg: #a0beea;
+    --fg: #69cc30;
+    --accent: #00b894;   /* mint‑green */
+    --accent-fade: #00b89433;
+    --mono: "JetBrains Mono", "Fira Code", monospace;
+}
+
+html,body { height: 100%; background: var(--bg); color: var(--fg); font-family: var(--mono); line-height: 1.5; }
+a       { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent-fade); }
+a:hover { border-bottom-style: solid; }
+
+.wrapper {
+    min-height: 100%;
+    justify-content: flex-start;    
+    align-items: flex-start;       
+    text-align: left;
+    padding: 2rem;
+}
+
+/* headline glitch‑style caret */
+h1::after {
+    content: "_";
+    animation: blink 1s steps(2, start) infinite;
+    color: var(--accent);
+}
+@keyframes blink { to { visibility: hidden; } }
+
+/* contact footer */
+footer { margin-top: 3rem; font-size: .9rem; opacity: .7; }
+
+/* responsive tweaks */
+@media (max-width: 600px) {
+    h1 { font-size: 1.8rem; }
+    nav ul { gap: 1rem; }
+}
+
+.code-block{position:relative;background:#f5f5f5;border:1px solid #ddd;padding:0.75rem 0.5rem;margin:1em 0}
+.code-block pre{margin:0;overflow-x:auto}
+.code-block button.copy{position:absolute;top:0.3rem;right:0.3rem;border:none;background:#eaeaea;padding:0.2rem 0.5rem;cursor:pointer}
+.code-block button.copy:active{background:#d5d5d5}
+.callout{border-left:4px solid #888;background:#f9f9f9;padding:0.5rem 1rem;margin:1em 0;position:relative}
+.callout-title{font-weight:bold;margin-bottom:0.25rem;display:flex;align-items:center}
+.callout-title button.toggle{margin-left:auto;border:none;background:transparent;cursor:pointer;font-size:1em}
+.callout-body p{margin:0.25rem 0}
+
+</style>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+function copySibling(btn){{
+    navigator.clipboard.writeText(btn.nextElementSibling.innerText).then(function(){{
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function(){{btn.textContent = orig;}}, 1000);
+    }});
+}}
+function toggleCallout(btn){{
+    const body = btn.closest('.callout').querySelector('.callout-body');
+    if (body.style.display === 'none') {{
+        body.style.display = '';
+        btn.textContent = '-';
+    }} else {{
+        body.style.display = 'none';
+        btn.textContent = '+';
+    }}
+}}
+</script>
+
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>$ </h1>
+        <p class="tagline">open‑source engineer · privacy advocate · cypherpunk</p>
+    </header>
+
+
+    <div id="placement"></div>
+
+    <footer>
+        <p>&copy; 2025 your‑handle — <a href="mailto:you@example.com">you@example.com</a></p>
+    </footer>
+</div>
+</body>
+</html>

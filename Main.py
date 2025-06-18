@@ -3,7 +3,7 @@
 import re
 import sys
 import html
-from templates import get_head, CODE_BLOCK_TEMPLATE
+from .templates import get_head, CODE_BLOCK_TEMPLATE
 from pathlib import Path
 from typing import List, Tuple
 
@@ -155,13 +155,8 @@ def markdown_to_html(
         out.append(f"<p>{paragraph}</p>")
         i += 1
 
-    # append home page content
-    if md_home_pg.exists():
-        out.append("<hr>")
-        for ln in md_home_pg.read_text(encoding="utf8").splitlines():
-            if ln.strip():
-                out.append(f"<p>{inline_md(ln)}</p>")
-
+    out.append("<hr>")
+    
     # links to other pages
     def make_link(item: str) -> str:
         href = html.escape(str((root_dir / item).as_posix()))
@@ -171,6 +166,7 @@ def markdown_to_html(
     if terminal_sites:
         out.append("<ul>")
         for site in terminal_sites:
+            site = str(Path(site).with_suffix(".html"))
             out.append(f"<li>{make_link(site)}</li>")
         out.append("</ul>")
 
@@ -183,7 +179,36 @@ def markdown_to_html(
     # 3) wrap with boilerplate
     head = get_head(title)
     tail = "\n</body>\n</html>"
-    return head + "\n".join(out) + tail
+    from bs4 import BeautifulSoup
+
+    # The string variable to be embedded
+    your_string = ""
+    for i in out:
+        your_string += i + "\n"
+
+    # Read in the HTML file
+    with open('/Users/gramjos/Computation/obsidianRoot_2_web/index.html', 'r') as f:
+        contents = f.read()
+
+    # Create a BeautifulSoup object to parse the HTML
+    soup = BeautifulSoup(contents, 'html.parser')
+
+    # Find the div tag with the specified id and insert the HTML content
+    placement_div = soup.find('div', id='placement')
+    if placement_div:
+        # Clear existing content and append the parsed HTML string.
+        # This ensures the HTML is rendered, not displayed as a literal string.
+        placement_div.clear()
+        placement_div.append(BeautifulSoup(your_string, 'html.parser'))
+
+    # Print the modified HTML
+    # print(soup.prettify())
+
+    # To save the modified HTML back to a file:
+    # with open('your_html_file_modified.html', 'w') as f:
+    #     f.write(str(soup))
+    # return head + "\n".join(out) + tail
+    return str(soup)
 
 # ────────────────────────────  CLI  ──────────────────────────── #
 
