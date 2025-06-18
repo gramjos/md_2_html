@@ -66,6 +66,13 @@ def build_callout(kind: str, title: str, body_lines: List[str]) -> str:
         f'</div>'
     )
 
+def is_valid_dir(path:Path) -> bool:
+    for item in path.iterdir():
+        b=item.name.lower().startswith('readme')
+        bb=item.name.lower().endswith('.md')
+        if item.is_file() and b and bb: return True
+    return False
+
 # ────────────────────────────  conversion helpers  ────────────────────── #
 
 def _convert_lines(lines: List[str]) -> List[str]:
@@ -224,7 +231,7 @@ def markdown_to_html(
     n not in ignore_list
     for n in ns 
     )
-    dirss = [d for d in l if d.is_dir() and d.name not in ignore_list]
+    dirss = [d for d in l if d.is_dir() and d.name not in ignore_list and is_valid_dir(d)]
     has_other_valid_dirs = any(dirss)
 
     if "README.md" in ns:
