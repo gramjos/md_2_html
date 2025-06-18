@@ -6,7 +6,8 @@ from typing import List, Tuple
 
 import html
 import re
-from src.templates import CODE_BLOCK_TEMPLATE
+import templates as t
+# from templates import CODE_BLOCK_TEMPLATE
 
 USAGE = "Usage: python Main.py FILE.md "
 
@@ -106,7 +107,7 @@ def _convert_lines(lines: List[str]) -> List[str]:
                 line_idx += 1
             line_idx += 1
             code = html.escape("\n".join(code_lines))
-            html_parts.append(CODE_BLOCK_TEMPLATE.format(lang=lang, code=code))
+            html_parts.append(t.CODE_BLOCK_TEMPLATE.format(lang=lang, code=code))
             continue
 
         if RE_LATEX_BLOCK.match(line):
@@ -212,7 +213,7 @@ def markdown_to_html(
     html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
 
     content_html = "\n".join(html_parts)
-    template_path = Path("index.html")
+    template_path = Path("example_output/index.html")
     return _embed_in_template(content_html, template_path)
 
 # ────────────────────────────  CLI  ──────────────────────────── #
@@ -221,7 +222,7 @@ def main() -> None:
     """CLI entry point used for manual testing."""
 
     input_path = Path('example_input/pipe.md')
-    output_path = input_path.with_suffix(".html")
+    output_path = Path('example_output/pipe.html')
 
     md_text = input_path.read_text(encoding="utf8")
     title = input_path.stem.replace("_", " ").title()
