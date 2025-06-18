@@ -7,6 +7,7 @@ from typing import List, Tuple
 import html
 import re
 import templates as t
+from GenHTML import GenHomePage, GenSingleton
 # from templates import CODE_BLOCK_TEMPLATE
 
 USAGE = "Usage: python Main.py FILE.md "
@@ -64,7 +65,6 @@ def build_callout(kind: str, title: str, body_lines: List[str]) -> str:
         f'<div class="callout-body">{body_html}</div>'
         f'</div>'
     )
-
 
 # ────────────────────────────  conversion helpers  ────────────────────── #
 
@@ -199,8 +199,6 @@ def markdown_to_html(
         Unused but kept for API compatibility.
     """
 
-    x=title;print(x); # more inoformation from front matter metadata, TODO for later
-
     html_parts: List[str] = []
 
     template_path = Path("src/index.html")
@@ -222,19 +220,21 @@ def markdown_to_html(
     n.lower().endswith('.md') 
     and 
     n.lower() != 'readme.md' 
-	and
-	n not in ignore_list
+    and
+    n not in ignore_list
     for n in ns 
-        )
+    )
+    dirss = [d for d in l if d.is_dir() and d.name not in ignore_list]
+    has_other_valid_dirs = any(dirss)
 
     if "README.md" in ns:
         home_lines = md_home_pg.read_text(encoding="utf8").splitlines()
         html_parts.extend(_convert_lines(home_lines))
         html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
-		if has_other_markdown:
         # TODO: create the single sites at this level so when link are clicked they go to a real site with the template
-		# # use the template index.html and fill in with conterted md from `terminal_sites` 
-
+        # # use the template index.html and fill in with conterted md from `terminal_sites` 
+        if has_other_valid_dirs: GenHomePage(root_dir, valid_dirs)
+        if has_other_markdown: GenSingleton(root_dir, terminal_sites)
 
         content_html = "\n".join(html_parts)
         x = _embed_in_template(content_html, template_path)
