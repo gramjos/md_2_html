@@ -8,7 +8,7 @@ import html
 import re
 from templates import CODE_BLOCK_TEMPLATE
 
-USAGE = "Usage: python Main.py FILE.md [output.html]"
+USAGE = "Usage: python Main.py FILE.md "
 
 # ────────────────────────────  regexes  ──────────────────────────────── #
 
@@ -212,7 +212,7 @@ def markdown_to_html(
     html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
 
     content_html = "\n".join(html_parts)
-    template_path = root_dir / "index.html"
+    template_path = Path("index.html")
     return _embed_in_template(content_html, template_path)
 
 # ────────────────────────────  CLI  ──────────────────────────── #
@@ -226,13 +226,14 @@ def main() -> None:
     md_text = input_path.read_text(encoding="utf8")
     title = input_path.stem.replace("_", " ").title()
 
-    home_page = Path('home_page.md')
+    home_page = Path('README.md')
+    root_dir=Path('/Users/gramjos/Documents/try_hosting_Vault/')
     html_out = markdown_to_html(
         md_text=md_text,
-        md_home_pg=home_page,
+        md_home_pg=root_dir/home_page,
         terminal_sites=['Pipeline_example.md', 'Pipeline_example_2.md'], # site singletons
         valid_dirs=['docs'],
-        root_dir=Path('.'),
+        root_dir=root_dir,
         title=title,
     )
     bytes_written = output_path.write_text(html_out, encoding="utf8")

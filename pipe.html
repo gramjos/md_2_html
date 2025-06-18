@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8">
 <title>your‑handle :: portfolio</title>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root {
     --bg: #a0beea;
-    --fg: #69cc30;
+    --fg: #1a0574;
     --accent: #00b894;   /* mint‑green */
     --accent-fade: #00b89433;
     --mono: "JetBrains Mono", "Fira Code", monospace;
@@ -53,8 +52,9 @@ footer { margin-top: 3rem; font-size: .9rem; opacity: .7; }
 .callout-body p{margin:0.25rem 0}
 
 </style>
+
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script>
 function copySibling(btn){{
     navigator.clipboard.writeText(btn.nextElementSibling.innerText).then(function(){{
@@ -74,45 +74,51 @@ function toggleCallout(btn){{
     }}
 }}
 </script>
+
 </head>
 <body>
 <div class="wrapper">
-<header>
-<h1>$ </h1>
-<p class="tagline">open‑source engineer · privacy advocate · cypherpunk</p>
-</header>
-<div id="placement"><h5><code>Demonstrative</code> pipe example</h5>
-<img alt="pipeline_example.png" src="../graphics/pipeline_example.png"/>
+    <header>
+        <h1>$ </h1>
+        <p class="tagline">open‑source engineer · privacy advocate · cypherpunk</p>
+    </header>
+
+
+    <div id="placement"><p>This is your new <em>vault</em>. by G. Joseph J.</p>
+<p>Make a note of something, [[create a link]], or try [the Importer](https://help.obsidian.md/Plugins/Importer)!</p>
+<p>When you're ready, delete this note and make the vault your own.</p>
+<h5><code>Demonstrative</code> pipe example</h5>
+<img src="../graphics/pipeline_example.png" alt="pipeline_example.png">
 <p>$$ \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi} $$</p>
 <p>Inline image ![[pipeline_example.png]] Above is the partial output of the command <code>$ ls /bin /usr/bin</code>. These are the binary executables in the file system.</p>
 <p>Say, we wanted to remove the white text. </p>
 <p><code>$ ls /bin /usr/bin |grep -v '/bin:$'</code> </p>
 <p><strong>Aside</strong>, <code>:</code> (colon) is a literal colon and is not a meta-character.</p>
 <p>The <code>-v</code> or <code>--invert-match</code> means, everything that does not match the grep string will be printed to standard out. </p>
-<div class="code-block"><button class="copy" onclick="copySibling(this)">Copy</button><pre><code class="language-shell"> $ ls /bin /usr/bin |grep -v '/bin:$'</code></pre></div>
-<div class="callout callout-caution"><div class="callout-title">⚠ Title<button class="toggle" onclick="toggleCallout(this)">-</button></div><div class="callout-body"><p>Contents</p><p>more</p></div></div>
-<div class="callout callout-danger"><div class="callout-title">🔥 Title<button class="toggle" onclick="toggleCallout(this)">-</button></div><div class="callout-body"><p>Contents</p><p>more</p></div></div>
+<div class="code-block"><button class="copy" onclick="copySibling(this)">Copy</button><pre><code class="language-shell"> $ ls /bin /usr/bin |grep -v &#x27;/bin:$&#x27;</code></pre></div>
+<div class="callout callout-caution"><div class="callout-title">&#9888; Title<button class="toggle" onclick="toggleCallout(this)">-</button></div><div class="callout-body"><p>Contents</p><p>more</p></div></div>
+<div class="callout callout-danger"><div class="callout-title">&#128293; Title<button class="toggle" onclick="toggleCallout(this)">-</button></div><div class="callout-body"><p>Contents</p><p>more</p></div></div>
 <p>Creating a matrix</p>
 <p>$$
 \begin{array}{rcl}
-	2&amp;5&amp;7 \\
-	2&amp;5&amp;7 \\
+	2&5&7 \\
+	2&5&7 \\
 \end{array}
 $$</p>
-<div class="callout callout-note"><div class="callout-title">ℹ Title<button class="toggle" onclick="toggleCallout(this)">-</button></div><div class="callout-body"><p>Contents</p><p>more</p></div></div>
+<div class="callout callout-note"><div class="callout-title">&#8505; Title<button class="toggle" onclick="toggleCallout(this)">-</button></div><div class="callout-body"><p>Contents</p><p>more</p></div></div>
 <p>fi</p>
-<hr/>
+<hr>
 <ul>
-<li><a href="Pipeline_example.html">Pipeline_example.html</a></li>
-<li><a href="Pipeline_example_2.html">Pipeline_example_2.html</a></li>
+<li><a href="/Users/gramjos/Documents/try_hosting_Vault/Pipeline_example.html">Pipeline_example.html</a></li>
+<li><a href="/Users/gramjos/Documents/try_hosting_Vault/Pipeline_example_2.html">Pipeline_example_2.html</a></li>
 </ul>
 <ul>
-<li><a href="docs">docs</a></li>
-</ul>
-</div>
-<footer>
-<p>© 2025 your‑handle — <a href="mailto:you@example.com">you@example.com</a></p>
-</footer>
+<li><a href="/Users/gramjos/Documents/try_hosting_Vault/docs">docs</a></li>
+</ul></div>
+
+    <footer>
+        <p>&copy; 2025 your‑handle — <a href="mailto:you@example.com">you@example.com</a></p>
+    </footer>
 </div>
 </body>
 </html>
