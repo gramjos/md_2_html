@@ -177,8 +177,7 @@ def _embed_in_template(content_html: str, template_path: Path) -> str:
 # ────────────────────────────  main converter  ───────────────────────── #
 
 def markdown_to_html(
-    md_text: str,
-    md_home_pg: Path,
+    md_path: Path,
     terminal_sites: List[str],
     valid_dirs: List[str],
     root_dir: Path,
@@ -188,10 +187,8 @@ def markdown_to_html(
 
     Parameters
     ----------
-    md_text:
-        Markdown content to convert.
-    md_home_pg:
-        Path to the home page markdown snippet.
+    md_path:
+        Markdown to convert.
     terminal_sites:
         List of article page names to link to.
     valid_dirs:
@@ -202,40 +199,58 @@ def markdown_to_html(
         Unused but kept for API compatibility.
     """
 
+    x=title;print(x); # more inoformation from front matter metadata, TODO for later
+
     html_parts: List[str] = []
 
-    if md_home_pg.exists():
+    template_path = Path("src/index.html")
+    md_home_pg = root_dir/Path('README.md')
+
+    # tasks:
+    # - get all items in root
+    # - Are we making a README Homepage?
+    # # -- need valid dirs and terminal sites (singleton)
+    # # -- generate html 
+
+    # all items in root
+    l=list(Path(root_dir).iterdir())
+    ns=[i.name for i in l]
+    # case
+
+    if "README.md" in ns:
         home_lines = md_home_pg.read_text(encoding="utf8").splitlines()
         html_parts.extend(_convert_lines(home_lines))
+        html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
+		# TODO: create the single sites at this level so when link are clicked they go to a real site with the template
 
+        content_html = "\n".join(html_parts)
+        x = _embed_in_template(content_html, template_path)
+        return x
+
+
+    md_text = md_path.read_text(encoding="utf8")
     html_parts.extend(_convert_lines(md_text.splitlines()))
     html_parts.append("<hr>")
     html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
 
     content_html = "\n".join(html_parts)
-    template_path = Path("example_output/index.html")
-    return _embed_in_template(content_html, template_path)
+    x = _embed_in_template(content_html, template_path= template_path)
+    return x
 
 # ────────────────────────────  CLI  ──────────────────────────── #
 
 def main() -> None:
     """CLI entry point used for manual testing."""
 
-    input_path = Path('example_input/pipe.md')
+    md_input = Path('example_input/pipe.md')
     output_path = Path('example_output/pipe.html')
-
-    md_text = input_path.read_text(encoding="utf8")
-    title = input_path.stem.replace("_", " ").title()
-
-    home_page = Path('README.md')
     root_dir=Path('/Users/gramjos/Documents/try_hosting_Vault/')
+
     html_out = markdown_to_html(
-        md_text=md_text,
-        md_home_pg=root_dir/home_page,
-        terminal_sites=['Pipeline_example.md', 'Pipeline_example_2.md'], # site singletons
+        md_path=md_input,
+        terminal_sites=['Pipeline_example.md', 'Pipeline_example_2.md'], 
         valid_dirs=['docs'],
         root_dir=root_dir,
-        title=title,
     )
     bytes_written = output_path.write_text(html_out, encoding="utf8")
     print(f"{bytes_written=}")

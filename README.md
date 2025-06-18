@@ -29,17 +29,18 @@ Both, 1 & 2 use the template `index.html`
 - Inline markup for `*em*`, `_em_`, `**strong**`, `__underline__` and `` `code` `` is processed in headers and paragraphs.
 - All other text is left as plain text.
 
-
 ## Usage
 ```
-python Main.py FILE.md 
+python src/x.py FILE.md 
 ```
 _writes FILE.html to disk_
 
 ### Additional Information Embedded
-`markdown_to_html` accepts a path to a home page, a list of site links and a
-list of directory links. These are appended to the generated HTML so the home
-page text is displayed and the links are clickable.
+`markdown_to_html` function accepts:
+- `md_text` : `str` raw markdown to be parsed
+- `terminal_sites`: `List[str]` Singleton articles
+- `valid_dirs`: `List[str]` Homepages
+- `root_dir`: `Path` startingpoint
 
 #### Supported Markdown
 - [ ] inline images
