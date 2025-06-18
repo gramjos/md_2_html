@@ -3,7 +3,7 @@
 import re
 import sys
 import html
-from .templates import get_head, CODE_BLOCK_TEMPLATE
+from templates import get_head, CODE_BLOCK_TEMPLATE
 from pathlib import Path
 from typing import List, Tuple
 
@@ -181,7 +181,7 @@ def markdown_to_html(
     your_string = ""
     for i in out: your_string += i + "\n"
 
-    with open('/Users/gramjos/Computation/obsidianRoot_2_web/md_2_html/index.html', 'r') as f:
+    with open('/Users/gramjos/Computation/md_2_html/index.html', 'r') as f:
         contents = f.read()
 
     soup = BeautifulSoup(contents, 'html.parser')

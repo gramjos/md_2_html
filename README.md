@@ -7,6 +7,11 @@
 
 This repository contains a Python script that turns a small subset of Markdown into a standalone HTML page. It is meant for quick static pages with minimal styling.
 
+This program creates two type of web pages:
+1. 'README home page' holds content, links to singleton articles, and links to other 'README home page' (valid directories)
+2. 'Singleton Articles' no links just content
+Both, 1 & 2 use the template `index.html`
+
 ## Algorithm Overview
 
 - Skip YAML front matter delimited by `---`.
@@ -26,13 +31,12 @@ This repository contains a Python script that turns a small subset of Markdown i
 
 ## Usage
 ```
-python Main.py FILE.md [output.html]
+python Main.py FILE.md 
 ```
-
-If the output path is omitted, `FILE.html` is created next to the input.  See `Pipeline_example.md` for an example and `test_md2html.py` for a basic test suite.
+_writes FILE.html to disk_
 
 ### Additional Information Embedded
-`markdown_to_html` now accepts a path to a home page, a list of site links and a
+`markdown_to_html` accepts a path to a home page, a list of site links and a
 list of directory links. These are appended to the generated HTML so the home
 page text is displayed and the links are clickable.
 
