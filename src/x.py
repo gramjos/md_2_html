@@ -212,16 +212,29 @@ def markdown_to_html(
     # # -- need valid dirs and terminal sites (singleton)
     # # -- generate html 
 
+    ignore_list = {'.DS_Store'}
+
     # all items in root
     l=list(Path(root_dir).iterdir())
     ns=[i.name for i in l]
-    # case
+    # case, is the length of (non README) markdown files greater than 0?
+    has_other_markdown = any(
+    n.lower().endswith('.md') 
+    and 
+    n.lower() != 'readme.md' 
+	and
+	n not in ignore_list
+    for n in ns 
+        )
 
     if "README.md" in ns:
         home_lines = md_home_pg.read_text(encoding="utf8").splitlines()
         html_parts.extend(_convert_lines(home_lines))
         html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
-		# TODO: create the single sites at this level so when link are clicked they go to a real site with the template
+		if has_other_markdown:
+        # TODO: create the single sites at this level so when link are clicked they go to a real site with the template
+		# # use the template index.html and fill in with conterted md from `terminal_sites` 
+
 
         content_html = "\n".join(html_parts)
         x = _embed_in_template(content_html, template_path)
