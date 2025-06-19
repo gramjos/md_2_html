@@ -6,8 +6,7 @@ from typing import List, Tuple, Union
 
 import html
 import re
-from . import templates as t
-from .GenHTML import GenHomePage, GenSingleton
+import templates as t
 # from templates import CODE_BLOCK_TEMPLATE
 
 USAGE = "Usage: python Main.py FILE.md "
@@ -72,6 +71,43 @@ def is_valid_dir(path:Path) -> bool:
         bb=item.name.lower().endswith('.md')
         if item.is_file() and b and bb: return True
     return False
+
+def GenHomePage(root_dir: Path, home_pgs: List[str]) -> None:
+    """
+    for each md in homepags: 
+        - generate an html file from template at `src/index.html` with the same markdown file name.
+        - convert to html and embed in at div id="placement"
+    """
+    items = list(root_dir.iterdir())
+    ig_lst = ['README.md', 'readme.md', '.DS_Store'] 
+    singletons = [item for item in items if item.suffix == '.md' and item.name not in ig_lst]
+    home_pgs = [directory for directory in items if directory.is_dir() and is_valid_dir(directory) and directory.name not in ig_lst]
+
+    fp = root_dir / Path("README.md")
+    t=fp.read_text(encoding="utf8").splitlines()
+    html_parts: List[str] = []
+    html_parts.extend(_convert_lines(t))
+
+    # placeholder content representing the home page body
+    html_parts.append("<p>This is the <em>home/README</em> page.</p>")
+
+    built_links = _build_links(singletons, home_pgs, root_dir)
+    html_parts.extend(built_links)
+
+    content_html = "\n".join(html_parts)
+    template_path = Path("src/index.html")
+    ret = _embed_in_template(content_html, template_path)
+    bytes_written = output_path.write_text(html_out, encoding="utf8")
+    pass
+
+
+def GenSingleton(root_dir: Path, singletons: List[str]) -> None:
+    """
+    for each md in singletons: 
+        - generate an html file from template at `src/index.html` with the same markdown file name.
+        - convert to html and embed in at div id="placement"
+    """
+    pass
 
 # ────────────────────────────  conversion helpers  ────────────────────── #
 
@@ -142,7 +178,8 @@ def _convert_lines(lines: List[str]) -> List[str]:
             line_idx += 1
             continue
 
-        paragraph = inline_md(line.rstrip("\n"))
+        l=line.rstrip("\n")
+        paragraph = inline_md(l)
         html_parts.append(f"<p>{paragraph}</p>")
         line_idx += 1
 
@@ -155,7 +192,7 @@ def _build_links(terminal_sites: List[str], valid_dirs: List[str], root_dir: Pat
 
     def make_link(item: str) -> str:
         href = html.escape(str((root_dir / item).as_posix()))
-        text = html.escape(item)
+        text = html.escape(str(item))
         return f'<a href="{href}">{text}</a>'
 
     if terminal_sites:
@@ -183,33 +220,35 @@ def _embed_in_template(content_html: str, template_path: Path) -> str:
 
 # ────────────────────────────  main converter  ───────────────────────── #
 
-def markdown_to_html(
-    md_input: Union[str, Path],
-    home_page: Path,
-    terminal_sites: List[str],
-    valid_dirs: List[str],
-    root_dir: Path,
-    title: str = "Document",
-) -> str:
+def markdown_to_html( root_dir: Path, title: str = "Document",) -> str:
     """Return a full HTML page for ``md_input`` using ``index.html`` template."""
+
+    if not is_valid_dir(root_dir): raise ValueError(f"Invalid root directory: {root_dir=}")
 
     template_path = Path("src/index.html")
 
-    if isinstance(md_input, Path):
-        lines = md_input.read_text(encoding="utf8").splitlines()
-    else:
-        lines = str(md_input).splitlines()
+    items = list(root_dir.iterdir())
+    ig_lst = ['README.md', 'readme.md', '.DS_Store'] 
+    singletons = [item for item in items if item.suffix == '.md' and item.name not in ig_lst]
+    home_pgs = [directory for directory in items if directory.is_dir() and is_valid_dir(directory) and directory.name not in ig_lst]
+
+    GenHomePage(root_dir, home_pgs)
+    GenSingleton(root_dir, singletons)
 
     html_parts: List[str] = []
-    html_parts.extend(_convert_lines(lines))
+    fp=root_dir/Path("README.md")
+    t=fp.read_text(encoding="utf8").splitlines()
+    html_parts.extend(_convert_lines(t))
 
     # placeholder content representing the home page body
-    html_parts.append("<p>This is the <em>home</em> page.</p>")
+    html_parts.append("<p>This is the <em>home/README</em> page.</p>")
 
-    html_parts.extend(_build_links(terminal_sites, valid_dirs, root_dir))
+    built_links = _build_links(singletons, home_pgs, root_dir)
+    html_parts.extend(built_links)
 
     content_html = "\n".join(html_parts)
-    return _embed_in_template(content_html, template_path)
+    ret = _embed_in_template(content_html, template_path)
+    return ret
 
 # ────────────────────────────  CLI  ──────────────────────────── #
 
@@ -218,15 +257,9 @@ def main() -> None:
 
     md_input = Path('example_input/pipe.md').read_text(encoding='utf8')
     output_path = Path('example_output/pipe.html')
-    root_dir = Path('.')
+    root_dir = Path('/Users/gramjos/Documents/try_hosting_Vault')
 
-    html_out = markdown_to_html(
-        md_input,
-        Path('home_page.md'),
-        terminal_sites=['Pipeline_example.md', 'Pipeline_example_2.md'],
-        valid_dirs=['docs'],
-        root_dir=root_dir,
-    )
+    html_out = markdown_to_html( root_dir=root_dir)
     bytes_written = output_path.write_text(html_out, encoding="utf8")
     print(f"{bytes_written=}")
     print(f"✓  wrote {output_path}")
